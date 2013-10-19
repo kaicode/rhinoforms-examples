@@ -59,46 +59,15 @@
 			</div>
 		</div>
 		<div class="col-md-9">
-			<h3>Simplest Example</h3>
-			<p>Here is the simplest form I could think of. We just collect one field named 'firstName'.</p>
-			<p>The docBase for this form flow is '/myData' so the field will be bound to a node /myData/firstName.</p>
-			<p>Put a name in and hit 'Finish' to see the XML result.</p>
-
+			<div id="readme"></div>
 			<ul class="nav nav-tabs">
-				<li class="active"><a href="#form" data-toggle="tab">Form Flow</a></li>
+				<li class="active"><a href="#formContainer" data-toggle="tab">Form Flow</a></li>
 				<li><a href="#flow" data-toggle="tab">Flow Definition</a></li>
-				<li><a href="#code" data-toggle="tab">simplest.html</a></li>
 			</ul>
 			<div class="tab-content">
-				<div class="tab-pane active" id="form">
-					<div id="formContainer" class="rhinoforms">
-
-					</div>
+				<div class="tab-pane active rhinoforms" id="formContainer">
 				</div>
 				<div class="tab-pane" id="flow">
-					<script type="syntaxhighlighter" class="brush: js"><![CDATA[
-[{
-	docBase: "/myData",
-	formLists: {
-		main: [
-			{ id: "customer", url: "simplest.html", actions: [ "finish" ] }
-		]
-	}
-}]
-]]></script>
-				</div>
-				<div class="tab-pane" id="code">
-					<script type="syntaxhighlighter" class="brush: html"><![CDATA[
-						<form rhinoforms="true">
-
-							<div class="form-group">
-								<label for="input_firstName">First Name</label>
-								<input id="input_firstName" class="form-control" type="text" name="firstName"/>
-							</div>
-
-							<input class="btn btn-default" type="submit" value="Finish" rf.action="finish"/>
-						</form>
-]]></script>
 				</div>
 			</div>
 		</div>
@@ -117,20 +86,71 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script type='text/javascript' src='js/rhinoforms.js' ></script>
+<script type='text/javascript' src='syntax-highlighter/js/shCore.js' ></script>
+<script type='text/javascript' src='syntax-highlighter/js/shBrushJScript.js' ></script>
+<script type='text/javascript' src='syntax-highlighter/js/shBrushXml.js' ></script>
 <script type='text/javascript'>
 	var rf = new Rhinoforms();
+
+	function loadFlowSource(flowPath) {
+
+		// Cleanup
+		$('#formContainer').empty();
+		$('#flow').empty();
+		$('.nav-tabs li').slice(2).remove();
+		$('.tab-content > div').slice(2).remove();
+
+		var flowDir = flowPath.substring(0, flowPath.lastIndexOf('/') + 1);
+
+		// Load form flow readme
+		$.ajax({
+			url: 'demo-resource',
+			data: { path: flowDir + 'readme.html' },
+			success: function(readmeHtml) {
+				$('#readme').html(readmeHtml);
+			}
+		});
+
+		// Load form flow source
+		$.ajax({
+			url: 'demo-resource',
+			data: { path: flowPath },
+			success: function(source) {
+				var flowContainer = $('#flow');
+				flowContainer.html('<script type=\"syntaxhighlighter\" class=\"brush: js\">\<![CDATA[' + source + ']]><\/script>');
+				SyntaxHighlighter.highlight();
+
+				// Load html form tabs
+				eval('var flow = ' + source);
+				var mainList = flow.formLists.main;
+				for (var a = 0; a < mainList.length; a++) {
+					var formPath = mainList[a].url;
+					$.ajax({
+						url: 'demo-resource',
+						data: { path: flowDir + formPath },
+						success: function(formHtml) {
+							var formPathEsc = formPath.replace(/\./g, '-');
+							var tabNav = $('ul.nav-tabs');
+							tabNav.append('<li><a href="#' + formPathEsc + '" data-toggle="tab">' + formPath + '</a></li>');
+							$('.tab-content').append('<div class=\"tab-pane\" id=\"' + formPathEsc + '"><script type="syntaxhighlighter" class="brush: html">\<![CDATA[' + formHtml + ']]><\/script><\/div>');
+							SyntaxHighlighter.highlight();
+						}
+					});
+				}
+			}
+		});
+	}
+
 	$('.nav a[formset]').click(function(e) {
 		e.preventDefault();
 		var $a = $(this);
 		var formSetName = $a.attr('formset');
-		rf.loadFlow('forms/' + formSetName + '/flow.js', $('#formContainer'));
+		var flowPath = 'forms/' + formSetName + '/flow.js';
+		rf.loadFlow(flowPath, $('#formContainer'));
+		loadFlowSource(flowPath);
 	}).first().click();
 
 </script>
 <script type='text/javascript' src='js/rhinoforms-custom-types.js' ></script>
-<script type='text/javascript' src='syntax-highlighter/js/shCore.js' ></script>
-<script type='text/javascript' src='syntax-highlighter/js/shBrushJScript.js' ></script>
-<script type='text/javascript' src='syntax-highlighter/js/shBrushXml.js' ></script>
-<script>SyntaxHighlighter.all()</script>
 </body>
 </html>

@@ -1,0 +1,44 @@
+#forkme_banner {
+    display: block;
+    padding-right: 50px;
+    color: #fff;
+    background: url('../images/blacktocat.png') #0090ff no-repeat 95% 50%;
+    font-weight: 700;
+}
+body > .container {
+    margin-top: 75px;
+}
+.side_menu {
+    position: static;
+    top: 50px;
+}
+.bs-sidebar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-shadow: 0 1px 0 #fff;
+    background-color: #f7f5fa;
+    border-radius: 5px;
+}
+.bs-sidebar a {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 30px;
+    font-size: 90%;
+}
+footer {
+    padding-top: 40px;
+    margin-top: 100px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
+}
+h1 {
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+    border-bottom: 1px solid #eeeeee;
+}
+a.anchor {
+    display: block;
+    position: relative;
+    top: -60px;
+    visibility: hidden;
+}

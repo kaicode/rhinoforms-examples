@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Rhinoforms: Make Fast, Secure Forms with minimal code" />
+	<meta name="author" content="Kai Kewley">
+	<link rel="shortcut icon" href="images/rhinoforms.png">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/carousel.css">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/rhinoform.css" />
+	<link rel="stylesheet" href="syntax-highlighter/css/shCore.css" />
+	<link rel="stylesheet" href="syntax-highlighter/css/shThemeDefault.css" />
+	<style>
+		.syntaxhighlighter .toolbar {
+			display: none;
+		}
+		#formContainer {
+			margin: 1em;
+		}
+	</style>
+	<title>Rhinoforms Examples</title>
+</head>
+
+<body>
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">Rhinoforms Examples</a>
+		</div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li class="main"><a href="http://rhinoforms.com">Back to Main Site</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a id="forkme_banner" href="https://github.com/kaicode/rhinoforms-examples" target="_blank">Examples on GitHub</a></li>
+			</ul>
+		</div><!--/.nav-collapse -->
+	</div>
+</div>
+
+<div class="container">
+
+	<div class="row">
+		<div class="col-md-3">
+			<div class="bs-sidebar">
+				<ul class="nav bs-sidenav forms-to-load">
+					<li><a href="#" formset="simplest">Simplest</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<h3>Simplest Example</h3>
+			<p>Here is the simplest form I could think of. We just collect one field named 'firstName'.</p>
+			<p>The docBase for this form flow is '/myData' so the field will be bound to a node /myData/firstName.</p>
+			<p>Put a name in and hit 'Finish' to see the XML result.</p>
+
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#form" data-toggle="tab">Form Flow</a></li>
+				<li><a href="#flow" data-toggle="tab">Flow Definition</a></li>
+				<li><a href="#code" data-toggle="tab">simplest.html</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="form">
+					<div id="formContainer" class="rhinoforms">
+
+					</div>
+				</div>
+				<div class="tab-pane" id="flow">
+					<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+[{
+	docBase: "/myData",
+	formLists: {
+		main: [
+			{ id: "customer", url: "simplest.html", actions: [ "finish" ] }
+		]
+	}
+}]
+]]></script>
+				</div>
+				<div class="tab-pane" id="code">
+					<script type="syntaxhighlighter" class="brush: html"><![CDATA[
+						<form rhinoforms="true">
+
+							<div class="form-group">
+								<label for="input_firstName">First Name</label>
+								<input id="input_firstName" class="form-control" type="text" name="firstName"/>
+							</div>
+
+							<input class="btn btn-default" type="submit" value="Finish" rf.action="finish"/>
+						</form>
+]]></script>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div> <!-- /container -->
+
+<footer>
+	<div class="container">
+		<p>Rhinoforms is licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>.</p>
+		<p>Site hosted on <a href="http://pages.github.com" target="_blank">GitHub Pages</a></p>
+	</div>
+</footer>
+
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script type='text/javascript' src='js/rhinoforms.js' ></script>
+<script type='text/javascript'>
+	var rf = new Rhinoforms();
+	$('.nav a[formset]').click(function(e) {
+		e.preventDefault();
+		var $a = $(this);
+		var formSetName = $a.attr('formset');
+		rf.loadFlow('forms/' + formSetName + '/flow.js', $('#formContainer'));
+	}).first().click();
+
+</script>
+<script type='text/javascript' src='js/rhinoforms-custom-types.js' ></script>
+<script type='text/javascript' src='syntax-highlighter/js/shCore.js' ></script>
+<script type='text/javascript' src='syntax-highlighter/js/shBrushJScript.js' ></script>
+<script type='text/javascript' src='syntax-highlighter/js/shBrushXml.js' ></script>
+<script>SyntaxHighlighter.all()</script>
+</body>
+</html>

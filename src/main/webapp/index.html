@@ -55,6 +55,7 @@
 			<div class="bs-sidebar">
 				<ul class="nav bs-sidenav forms-to-load">
 					<li><a href="#" formset="simplest">Simplest</a></li>
+					<li><a href="#" formset="validation-attribute">Validation Attribute</a></li>
 				</ul>
 			</div>
 		</div>
@@ -125,18 +126,22 @@
 				var mainList = flow.formLists.main;
 				for (var a = 0; a < mainList.length; a++) {
 					var formPath = mainList[a].url;
-					$.ajax({
-						url: 'demo-resource',
-						data: { path: flowDir + formPath },
-						success: function(formHtml) {
-							var formPathEsc = formPath.replace(/\./g, '-');
-							var tabNav = $('ul.nav-tabs');
-							tabNav.append('<li><a href="#' + formPathEsc + '" data-toggle="tab">' + formPath + '</a></li>');
-							$('.tab-content').append('<div class=\"tab-pane\" id=\"' + formPathEsc + '"><script type="syntaxhighlighter" class="brush: html">\<![CDATA[' + formHtml + ']]><\/script><\/div>');
-							SyntaxHighlighter.highlight();
-						}
-					});
+					loadFormSource(flowDir, formPath);
 				}
+			}
+		});
+	}
+
+	function loadFormSource(flowDir, formPath) {
+		var formPathEsc = formPath.replace(/\./g, '-');
+		$.ajax({
+			url: 'demo-resource',
+			data: { path: flowDir + formPath },
+			success: function(formHtml) {
+				var tabNav = $('ul.nav-tabs');
+				tabNav.append('<li><a href="#' + formPathEsc + '" data-toggle="tab">' + formPath + '</a></li>');
+				$('.tab-content').append('<div class=\"tab-pane\" id=\"' + formPathEsc + '"><script type="syntaxhighlighter" class="brush: html">\<![CDATA[' + formHtml + ']]><\/script><\/div>');
+				SyntaxHighlighter.highlight();
 			}
 		});
 	}

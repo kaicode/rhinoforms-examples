@@ -33,6 +33,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>rhinoforms-examples</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -56,6 +56,7 @@
 				<ul class="nav bs-sidenav forms-to-load">
 					<li><a href="#" formset="simplest">Simplest</a></li>
 					<li><a href="#" formset="validation-attribute">Validation Attribute</a></li>
+					<li><a href="#" formset="validation-function">Validation Function</a></li>
 				</ul>
 			</div>
 		</div>
@@ -71,6 +72,8 @@
 				<div class="tab-pane" id="flow">
 				</div>
 			</div>
+			<hr/>
+			<div id="readme-docs"></div>
 		</div>
 	</div>
 
@@ -96,10 +99,13 @@
 	function loadFlowSource(flowPath) {
 
 		// Cleanup
+		$('#readme').empty();
+		$('#readme-docs').empty();
 		$('#formContainer').empty();
 		$('#flow').empty();
 		$('.nav-tabs li').slice(2).remove();
 		$('.tab-content > div').slice(2).remove();
+		$('.nav-tabs li a').first().click();
 
 		var flowDir = flowPath.substring(0, flowPath.lastIndexOf('/') + 1);
 
@@ -109,6 +115,8 @@
 			data: { path: flowDir + 'readme.html' },
 			success: function(readmeHtml) {
 				$('#readme').html(readmeHtml);
+				$('#readme-docs').append($('#readme .docs'));
+				$('#readme .docs').remove();
 			}
 		});
 
@@ -134,12 +142,12 @@
 
 	function loadFormSource(flowDir, formPath) {
 		var formPathEsc = formPath.replace(/\./g, '-');
+		var tabNav = $('ul.nav-tabs');
+		tabNav.append('<li><a href="#' + formPathEsc + '" data-toggle="tab">' + formPath + '</a></li>');
 		$.ajax({
 			url: 'demo-resource',
 			data: { path: flowDir + formPath },
 			success: function(formHtml) {
-				var tabNav = $('ul.nav-tabs');
-				tabNav.append('<li><a href="#' + formPathEsc + '" data-toggle="tab">' + formPath + '</a></li>');
 				$('.tab-content').append('<div class=\"tab-pane\" id=\"' + formPathEsc + '"><script type="syntaxhighlighter" class="brush: html">\<![CDATA[' + formHtml + ']]><\/script><\/div>');
 				SyntaxHighlighter.highlight();
 			}

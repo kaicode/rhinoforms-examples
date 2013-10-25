@@ -1,0 +1,18 @@
+<form rhinoforms="true">
+	<h3>Team Members</h3>
+
+	<div class="form-group">
+		<ul>
+		<rf.forEach select="members/member" as="m">
+			<li>{{m.name}}
+				<a href="#" rf.action="editTeamMember?index={{m.index}}">Edit</a>
+				<a href="#" rf.action="removeTeamMember?index={{m.index}}">Delete</a>
+			</li>
+		</rf.forEach>
+		</ul>
+		<span rf.includeIf="{{count(members/member)}} == 0">None</span>
+	</div>
+
+	<input class="btn btn-default" type="button" value="Add Member" rf.action="addTeamMember"/>
+	<input class="btn btn-default" type="button" value="Finish" rf.action="finish"/>
+</form>

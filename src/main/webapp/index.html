@@ -132,25 +132,30 @@
 
 				// Load html form tabs
 				eval('var flow = ' + source);
-				var mainList = flow.formLists.main;
-				for (var a = 0; a < mainList.length; a++) {
-					var formPath = mainList[a].url;
-					loadFormSource(flowDir, formPath);
+				for (var formListName in flow.formLists) {
+					var formList = flow.formLists[formListName];
+					for (var a = 0; a < formList.length; a++) {
+						var formPath = formList[a].url;
+						loadFormSource(flowDir, formPath);
+					}
 				}
 			}
 		});
 	}
 
 	function loadFormSource(flowDir, formPath) {
-		var formPathEsc = formPath.replace(/\./g, '-');
-		var tabNav = $('ul.nav-tabs');
-		tabNav.append('<li><a href="#' + formPathEsc + '" data-toggle="tab">' + formPath + '</a></li>');
+		var formPathEsc = (flowDir + formPath).replace(/\./g, '-').replace(/\//g, '_');
+		var $tabNav = $('ul.nav-tabs');
+		$tabNav.append('<li><a href="#' + formPathEsc + '" data-toggle="tab">' + formPath + '</a></li>');
 		$.ajax({
 			url: 'demo-resource',
 			data: { path: flowDir + formPath },
 			success: function(formHtml) {
-				$('.tab-content').append('<div class=\"tab-pane\" id=\"' + formPathEsc + '"><script type="syntaxhighlighter" class="brush: html">\<![CDATA[' + formHtml + ']]><\/script><\/div>');
-				SyntaxHighlighter.highlight();
+				if ($tabNav.find('[href="#' + formPathEsc + '"]').size() > 0) {
+					// Tab still exists
+					$('.tab-content').append('<div class=\"tab-pane\" id=\"' + formPathEsc + '"><script type="syntaxhighlighter" class="brush: html">\<![CDATA[' + formHtml + ']]><\/script><\/div>');
+					SyntaxHighlighter.highlight();
+				}
 			}
 		});
 	}

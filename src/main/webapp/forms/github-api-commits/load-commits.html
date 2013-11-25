@@ -1,0 +1,11 @@
+<form rhinoforms="true">
+
+	Waiting for GitHub ...
+
+	<input class="hidden" type="submit" rf.action="load" id="load-github-data"/>
+</form>
+<script>
+	rf.onFormLoad(function() {
+		$("#load-github-data").click();
+	})
+</script>

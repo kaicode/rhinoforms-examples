@@ -1,0 +1,18 @@
+<form rhinoforms="true">
+
+	<div class="form-group">
+		<h3>Last {{count(rhinoforms.commits.a.e)}} Rhinoforms commits</h3>
+		<hr/>
+
+		<rf.forEach select="rhinoforms/commits/a/e" as="commit" >
+			<div>
+				<blockquote>{{commit.commit.message}}</blockquote>
+				<a href="{{commit.html_url}}">{{commit.sha}}</a><br/>
+				{{commit.commit.author.name}} ({{commit.author.login}})
+				<hr/>
+			</div>
+		</rf.forEach>
+
+	</div>
+	
+</form>

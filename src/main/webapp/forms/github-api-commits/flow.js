@@ -7,7 +7,7 @@
 						{
 							name: "load",
 							submission: {
-								url: "https://api.github.com/repos/kaicode/rhinoforms/commits?per_page=5",
+								url: "https://api.github.com/repos/rhinoforms/rhinoforms/commits?per_page=5",
 								method: "get",
 								resultInsertPoint: "/myData/rhinoforms/commits"
 							},
